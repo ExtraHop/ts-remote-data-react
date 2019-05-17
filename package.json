@@ -1,0 +1,34 @@
+{
+    "name": "ts-remote-data-react",
+    "version": "0.1.0",
+    "description": "Components and hooks for using RemoteData in React",
+    "author": {
+        "name": "Ted Driggs",
+        "email": "t.driggs@extrahop.com"
+    },
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts",
+    "license": "BSD-2-Clause",
+    "homepage": "https://github.com/ExtraHop/ts-remote-data-react",
+    "scripts": {
+        "build": "tsc"
+    },
+    "devDependencies": {
+        "typescript": "^3.4.3",
+        "@types/react": "^16.8.17"
+    },
+    "dependencies": {
+        "ts-remote-data": "^1.0.1",
+        "react": "^16.8.6"
+    },
+    "repository": "github:ExtraHop/ts-remote-data-react",
+    "keywords": [
+        "react",
+        "remote",
+        "async",
+        "fetch"
+    ],
+    "files": [
+        "lib/**/*"
+    ]
+}
