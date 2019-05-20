@@ -7,21 +7,7 @@ import React, {
 } from 'react';
 import RemoteData from 'ts-remote-data';
 
-const useTimeout = (
-    callback: () => void,
-    delay: number | null | false,
-): void => {
-    const currentCallback = useRef(callback);
-    useEffect(() => {
-        currentCallback.current = callback;
-    }, [callback]);
-    useEffect(() => {
-        const fire = (): void => currentCallback.current();
-        if (typeof delay !== 'number') return;
-        const id = setTimeout(fire, delay);
-        return () => clearTimeout(id);
-    }, [delay]);
-};
+import { useTimeout } from './useTimeout';
 
 interface RemoteSuspenseProps<T> {
     /**
