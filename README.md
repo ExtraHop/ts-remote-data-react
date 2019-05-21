@@ -85,6 +85,18 @@ The component is similar to `React.Suspense`, with a couple key differences:
 
 Finally, we use the `RemoteData.getOr` and `RemoteData.asFailure` functions to satisfy the prop types of `LineSeriesLayer` while making sure that `LineChart` cannot simultaneously have an error and series data.
 
+## Activity Indicator
+
+Now that we have a `LineChart` component which handles remote data for us, we can use that in a page. However, imagine we get a complaint: When users change the time range the new data can take 2 seconds to arrive. Users think the page is not responding, and are confused.
+
+We don't want to go back to tearing down the chart and showing a loading spinner; that undoes the work we've done on making a smooth experience. Worse, if there were several charts on-screen, the user would see an entire meadow's worth of loading spinners come into bloom.
+
+We want something to show **an** indicator when background activity is occurring. In keeping with React's declarative philosophy, we'd like this to be declarative, and we'd rather it not be something devs have to remember to add themselves.
+
+This is the problem `ActivityIndicator` solves. It takes advantage of the fact that displaying stale data strongly implies background activity to automatically track when data updates are in-flight, and then renders an element of your choice when that update is taking too long.
+
+The `ActivityIndicator` is not designed for use on initial data loads, as those cases are best handled closer to the not-yet-initialized UI by using `RemoteSuspense`. However, it is possible to directly declare background activity is occurring using the `useActivityIndicator` hook; this can be very useful when some task is in progress that doesn't have a clear UI surface.
+
 ## Tips / Best Practices
 
 * Rather than directly using `RemoteSuspense` in your feature code, create components for your project which capture your common data fetching behaviors.
