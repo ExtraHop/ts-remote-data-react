@@ -6,6 +6,7 @@
         "target": "es6",
         "jsx": "react",
         "declaration": true,
+        "stripInternal": true,
         "outDir": "./lib"
     }
 }
