@@ -91,21 +91,13 @@ export const ActivityIndicator: FC<{
         [],
     );
 
-    let renderedIndication: ReactNode;
-
-    if (!indicator) {
-        renderedIndication = null;
-    } else if (typeof indicator === 'function' && !isElement(indicator)) {
-        renderedIndication = indicator(isIndicating);
-    } else {
-        renderedIndication = isIndicating ? indicator : null;
-    }
-
     return (
         <ActivityIndicatorContext.Provider value={registrar}>
             <ActivityStatusContext.Provider value={isIndicating}>
                 {children}
-                {renderedIndication}
+                {typeof indicator === 'function' && !isElement(indicator)
+                    ? indicator(isIndicating)
+                    : isIndicating && indicator}
             </ActivityStatusContext.Provider>
         </ActivityIndicatorContext.Provider>
     );
