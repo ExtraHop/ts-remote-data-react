@@ -8,6 +8,7 @@ import React, {
 import RemoteData from 'ts-remote-data';
 
 import { useTimeout } from './useTimeout';
+import { isElement } from 'react-is';
 
 interface RemoteSuspenseProps<T> {
     /**
@@ -27,12 +28,16 @@ interface RemoteSuspenseProps<T> {
      */
     loadingFallback?: ReactNode;
     /**
-     * A function called to render an error view when `data` is in the failure
-     * state.
+     * The element to display when the remote data fails to load. This can
+     * either be a React node, or it can be a function which accepts the
+     * `error` property from the failure passed in the `data` prop.
      *
-     * @param error The error attached to `data`
+     * Both of the following are valid:
+     *
+     * * `<RemoteSuspense failureFallback={<ErrorMessage />} />`
+     * * `<RemoteSuspense failureFallback={err => <Panel error={err} />}`
      */
-    failureFallback?(error: unknown): ReactNode;
+    failureFallback: ReactNode | ((error: unknown) => ReactNode);
     /**
      * Callback invoked when the data is ready.
      *
@@ -65,6 +70,14 @@ export const RemoteSuspense = <T extends unknown>({
     if (data === RemoteData.LOADING) {
         return <>{showLoading && loadingFallback}</>;
     }
-    if (RemoteData.isFailure(data)) return <>{failureFallback(data.error)}</>;
+    if (RemoteData.isFailure(data))
+        return (
+            <>
+                {typeof failureFallback === 'function' &&
+                !isElement(failureFallback)
+                    ? failureFallback(data.error)
+                    : failureFallback}
+            </>
+        );
     return <>{props.children(data)}</>;
 };
