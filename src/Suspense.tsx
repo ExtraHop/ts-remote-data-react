@@ -37,7 +37,7 @@ interface RemoteSuspenseProps<T> {
      * * `<RemoteSuspense failureFallback={<ErrorMessage />} />`
      * * `<RemoteSuspense failureFallback={err => <Panel error={err} />}`
      */
-    failureFallback: ReactNode | ((error: unknown) => ReactNode);
+    failureFallback?: ReactNode | ((error: unknown) => ReactNode);
     /**
      * Callback invoked when the data is ready.
      *
