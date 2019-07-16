@@ -97,6 +97,24 @@ This is the problem `ActivityIndicator` solves. It takes advantage of the fact t
 
 The `ActivityIndicator` is not designed for use on initial data loads, as those cases are best handled closer to the not-yet-initialized UI by using `RemoteSuspense`. However, it is possible to directly declare background activity is occurring using the `useActivityIndicator` hook; this can be very useful when some task is in progress that doesn't have a clear UI surface.
 
+## usePromise and useAsyncOperation
+
+React's `useEffect` hook deliberately doesn't support async operations, as components need to think about the possibility of user input invalidating an async task before it completes.
+However, it's common to need an ad-hoc `fetch` or similar call inside a component, and combining `useEffect` with `useState` every time is boilerplate that can hide subtle race conditions or other bugs.
+
+This package provides two hooks to solve the issue: `usePromise` and `useAsyncOperation`.
+
+`usePromise` is appropriate in cases where your component receives a `Promise` that it didn't initiate.
+For example, if you have a module-scope function which - after being called once - always returns the same promise, your component doesn't "own" that promise; it is merely subscribing to the results.
+Calling `usePromise(somePromise)` will return a `RemoteData<T>` and will add `then` and `catch` handlers to the promise.
+If you change the promise before it completes, further updates to the old promise will be ignored.
+
+`useAsyncOperation` is for cases where your component needs to make a new promise.
+For example, the user chooses a category of products and you then fetch the best sellers in that category.
+This hook takes two arguments: The async function to invoke, and the dependencies array.
+To allow cancellation of outstanding requests due to user actions, the provided async function will be given an `AbortSignal` as its first argument.
+When the `deps` change, the signal will be invoked; this allows you to cancel outstanding fetches or other now-irrelevant async work.
+
 ## Tips / Best Practices
 
 * Rather than directly using `RemoteSuspense` in your feature code, create components for your project which capture your common data fetching behaviors.
@@ -104,3 +122,5 @@ The `ActivityIndicator` is not designed for use on initial data loads, as those 
 * When using `useRemoteLatest`, you may want a data change _not_ to preserve old data - for example, a text-based search may want to immediately throw out old results when the user changes their search string.
   In this case, wrap the component calling `useRemoteLatest` in a component whose `key` prop is set to be the value that should cause old results not to appear.
   React's own behavior with keys will then cause the component to be recreated, which will prevent it from accessing the old data.
+* `useAsyncOperation` provides an `AbortSignal` so your function can avoid doing extra work if the result becomes irrelevant.
+  While it's not _necessary_ to consume the signal - the hook will still prevent a stale promise from causing re-renders - but checking the signal between calculation steps or passing it to `fetch` will reduce the CPU and network usage of your app.
