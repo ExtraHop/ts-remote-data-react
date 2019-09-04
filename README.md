@@ -102,12 +102,16 @@ The `ActivityIndicator` is not designed for use on initial data loads, as those 
 React's `useEffect` hook deliberately doesn't support async operations, as components need to think about the possibility of user input invalidating an async task before it completes.
 However, it's common to need an ad-hoc `fetch` or similar call inside a component, and combining `useEffect` with `useState` every time is boilerplate that can hide subtle race conditions or other bugs.
 
-This package provides two hooks to solve the issue: `usePromise` and `useAsyncOperation`.
+This package provides three hooks to solve the issue: `usePromise`, `usePromiseState`, and `useAsyncOperation`.
 
 `usePromise` is appropriate in cases where your component receives a `Promise` that it didn't initiate.
 For example, if you have a module-scope function which - after being called once - always returns the same promise, your component doesn't "own" that promise; it is merely subscribing to the results.
 Calling `usePromise(somePromise)` will return a `RemoteData<T>` and will add `then` and `catch` handlers to the promise.
 If you change the promise before it completes, further updates to the old promise will be ignored.
+
+`usePromiseState` is the async equivalent of `useState`.
+Like `usePromise`, it gives you a `RemoteData` view of some Promise, but you control when it updates, and changing it forces a rerender.
+If a user can initiate an async action, such as testing connectivity to a cloud service, you can have the `onClick` event of the button set the promise and start the test.
 
 `useAsyncOperation` is for cases where your component needs to make a new promise.
 For example, the user chooses a category of products and you then fetch the best sellers in that category.
