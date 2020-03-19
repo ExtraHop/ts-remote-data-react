@@ -11,7 +11,8 @@
     "license": "BSD-2-Clause",
     "homepage": "https://github.com/ExtraHop/ts-remote-data-react",
     "scripts": {
-        "build": "tsc"
+        "build": "tsc",
+        "prepare": "npm run build"
     },
     "devDependencies": {
         "@types/react": "^16.8.17",
