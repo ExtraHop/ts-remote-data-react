@@ -69,6 +69,7 @@ export const ActivityIndicator: FC<{
      * child.
      */
     indicator?: ReactNode | SelfHidingIndicator;
+    children?: ReactNode;
 }> = ({ indicator, children }) => {
     const registered = useRef(new Set<number>());
     /**

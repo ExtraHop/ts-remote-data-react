@@ -15,13 +15,13 @@
         "prepare": "npm run build"
     },
     "devDependencies": {
-        "@types/react": "^16.8.17",
-        "@types/react-is": "^16.7.1",
-        "typescript": "^3.4.3"
+        "@types/react": "^18.0.0 || ^17.0.0 || ^16.8.17",
+        "@types/react-is": "^18.0.0 || ^17.0.0 || ^16.7.1",
+        "typescript": "^4.0.0 || ^3.4.3"
     },
     "dependencies": {
-        "react": "^16.8.6",
-        "react-is": "^16.8.6",
+        "react": "^18.0.0 || ^17.0.0 || ^16.8.6",
+        "react-is": "^18.0.0 || ^17.0.0 || ^16.8.6",
         "ts-remote-data": "^1.0.1"
     },
     "repository": "github:ExtraHop/ts-remote-data-react",
